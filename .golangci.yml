@@ -57,7 +57,7 @@ formatters:
       simplify: true
     goimports:
       local-prefixes:
-        - helm.sh/helm/v3
+        - helm.sh/helm/v4
   exclusions:
     generated: lax
     paths:

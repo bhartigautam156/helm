@@ -30,8 +30,8 @@ import (
 
 	"net/http"
 
-	"helm.sh/helm/v3/internal/version"
-	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v4/internal/version"
+	"helm.sh/helm/v4/pkg/chart"
 )
 
 // HTTPURLLoader implements a loader for HTTP/HTTPS URLs

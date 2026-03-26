@@ -30,7 +30,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v4/pkg/chart"
 )
 
 // MaxDecompressedChartSize is the maximum size of a chart archive that will be

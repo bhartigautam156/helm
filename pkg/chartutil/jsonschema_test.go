@@ -23,7 +23,7 @@ import (
 	"strings"
 	"testing"
 
-	"helm.sh/helm/v3/pkg/chart"
+	"helm.sh/helm/v4/pkg/chart"
 )
 
 func TestValidateAgainstSingleSchema(t *testing.T) {
