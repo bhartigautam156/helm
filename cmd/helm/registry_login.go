@@ -21,6 +21,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net/url"
 	"os"
 	"strings"
 
@@ -58,6 +59,11 @@ func newRegistryLoginCmd(cfg *action.Configuration, out io.Writer) *cobra.Comman
 		RunE: func(_ *cobra.Command, args []string) error {
 			hostname := args[0]
 
+			hostname, err := sanitizeRegistryHostname(hostname)
+			if err != nil {
+				return err
+			}
+
 			username, password, err := getUsernamePassword(o.username, o.password, o.passwordFromStdinOpt)
 			if err != nil {
 				return err
@@ -83,6 +89,26 @@ func newRegistryLoginCmd(cfg *action.Configuration, out io.Writer) *cobra.Comman
 	f.BoolVar(&o.plainHTTP, "plain-http", false, "use insecure HTTP connections for the chart upload")
 
 	return cmd
+}
+
+func sanitizeRegistryHostname(input string) (string, error) {
+
+	if strings.HasPrefix(input, "https://") || strings.HasPrefix(input, "http://") {
+		u, err := url.Parse(input)
+		if err != nil {
+			return "", fmt.Errorf("invalid registry URL %q: %w", input, err)
+		}
+		if u.Host == "" {
+			return "", fmt.Errorf("invalid registry URL %q: no host found", input)
+		}
+		return u.Host, nil
+	}
+
+	if idx := strings.Index(input, "/"); idx != -1 {
+		return input[:idx], nil
+	}
+
+	return input, nil
 }
 
 // Adapted from https://github.com/oras-project/oras
