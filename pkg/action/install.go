@@ -407,7 +407,7 @@ func (i *Install) RunWithContext(ctx context.Context, ch ci.Charter, vals map[st
 		if i.TakeOwnership {
 			toBeAdopted, err = requireAdoption(resources)
 		} else {
-			toBeAdopted, err = existingResourceConflict(resources, rel.Name, rel.Namespace)
+			toBeAdopted, err = existingResourceConflict(resources, rel.Name, rel.Namespace, i.TakeOwnership)
 		}
 		if err != nil {
 			return nil, fmt.Errorf("unable to continue with install: %w", err)
@@ -624,7 +624,7 @@ func (i *Install) availableName() error {
 	releaseutil.Reverse(hl, releaseutil.SortByRevision)
 	rel := hl[0]
 
-	if st := rel.Info.Status; i.Replace && (st == release.StatusUninstalled || st == release.StatusFailed || st == release.StatusPendingInstall) {
+	if st := rel.Info.Status; i.Replace && (st == rcommon.StatusUninstalled || st == rcommon.StatusFailed || st == rcommon.StatusPendingInstall) {
 		return nil
 	}
 	return errors.New("cannot reuse a name that is still in use")
