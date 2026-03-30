@@ -17,7 +17,6 @@ limitations under the License.
 package rules
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -33,7 +32,7 @@ import (
 // they are only tested for well-formedness.
 //
 // If additional values are supplied, they are coalesced into the values in values.yaml.
-func ValuesWithOverrides(linter *support.Linter, valueOverrides map[string]any, skipSchemaValidation bool) {
+func ValuesWithOverrides(linter *support.Linter, valueOverrides map[string]interface{}, skipSchemaValidation bool) {
 	file := "values.yaml"
 	vf := filepath.Join(linter.ChartDir, file)
 	fileExists := linter.RunLinterRule(support.InfoSev, file, validateValuesFileExistence(vf))
@@ -48,12 +47,12 @@ func ValuesWithOverrides(linter *support.Linter, valueOverrides map[string]any, 
 func validateValuesFileExistence(valuesPath string) error {
 	_, err := os.Stat(valuesPath)
 	if err != nil {
-		return errors.New("file does not exist")
+		return fmt.Errorf("file does not exist")
 	}
 	return nil
 }
 
-func validateValuesFile(valuesPath string, overrides map[string]any, skipSchemaValidation bool) error {
+func validateValuesFile(valuesPath string, overrides map[string]interface{}, skipSchemaValidation bool) error {
 	values, err := common.ReadValuesFile(valuesPath)
 	if err != nil {
 		return fmt.Errorf("unable to parse YAML: %w", err)
@@ -64,7 +63,7 @@ func validateValuesFile(valuesPath string, overrides map[string]any, skipSchemaV
 	// We could change that. For now, though, we retain that strategy, and thus can
 	// coalesce tables (like reuse-values does) instead of doing the full chart
 	// CoalesceValues
-	coalescedValues := util.CoalesceTables(make(map[string]any, len(overrides)), overrides)
+	coalescedValues := util.CoalesceTables(make(map[string]interface{}, len(overrides)), overrides)
 	coalescedValues = util.CoalesceTables(coalescedValues, values)
 
 	ext := filepath.Ext(valuesPath)

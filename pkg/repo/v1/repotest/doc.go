@@ -13,18 +13,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v2
+/*
+Package repotest provides utilities for testing.
 
-import "fmt"
-
-// ValidationError represents a data validation error.
-type ValidationError string
-
-func (v ValidationError) Error() string {
-	return "validation: " + string(v)
-}
-
-// ValidationErrorf takes a message and formatting options and creates a ValidationError
-func ValidationErrorf(msg string, args ...interface{}) ValidationError {
-	return ValidationError(fmt.Sprintf(msg, args...))
-}
+The server provides a testing server that can be set up and torn down quickly.
+*/
+package repotest

@@ -61,7 +61,7 @@ func TestLoadDirWithDevNull(t *testing.T) {
 		t.Fatalf("Failed to load testdata: %s", err)
 	}
 	if _, err := l.Load(); err == nil {
-		t.Error("packages with an irregular file (/dev/null) should not load")
+		t.Errorf("packages with an irregular file (/dev/null) should not load")
 	}
 }
 
@@ -508,7 +508,7 @@ func TestLoadInvalidArchive(t *testing.T) {
 func TestLoadValues(t *testing.T) {
 	testCases := map[string]struct {
 		data          []byte
-		expctedValues map[string]any
+		expctedValues map[string]interface{}
 	}{
 		"It should load values correctly": {
 			data: []byte(`
@@ -517,11 +517,11 @@ foo:
 bar:
   version: v2
 `),
-			expctedValues: map[string]any{
-				"foo": map[string]any{
+			expctedValues: map[string]interface{}{
+				"foo": map[string]interface{}{
 					"image": "foo:v1",
 				},
-				"bar": map[string]any{
+				"bar": map[string]interface{}{
 					"version": "v2",
 				},
 			},
@@ -536,11 +536,11 @@ bar:
 foo:
   image: foo:v2
 `),
-			expctedValues: map[string]any{
-				"foo": map[string]any{
+			expctedValues: map[string]interface{}{
+				"foo": map[string]interface{}{
 					"image": "foo:v2",
 				},
-				"bar": map[string]any{
+				"bar": map[string]interface{}{
 					"version": "v2",
 				},
 			},
@@ -560,24 +560,24 @@ foo:
 }
 
 func TestMergeValuesV2(t *testing.T) {
-	nestedMap := map[string]any{
+	nestedMap := map[string]interface{}{
 		"foo": "bar",
 		"baz": map[string]string{
 			"cool": "stuff",
 		},
 	}
-	anotherNestedMap := map[string]any{
+	anotherNestedMap := map[string]interface{}{
 		"foo": "bar",
 		"baz": map[string]string{
 			"cool":    "things",
 			"awesome": "stuff",
 		},
 	}
-	flatMap := map[string]any{
+	flatMap := map[string]interface{}{
 		"foo": "bar",
 		"baz": "stuff",
 	}
-	anotherFlatMap := map[string]any{
+	anotherFlatMap := map[string]interface{}{
 		"testing": "fun",
 	}
 
@@ -600,7 +600,7 @@ func TestMergeValuesV2(t *testing.T) {
 	}
 
 	testMap = MergeMaps(anotherFlatMap, anotherNestedMap)
-	expectedMap := map[string]any{
+	expectedMap := map[string]interface{}{
 		"testing": "fun",
 		"foo":     "bar",
 		"baz": map[string]string{

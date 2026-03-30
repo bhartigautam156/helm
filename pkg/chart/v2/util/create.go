@@ -669,7 +669,7 @@ func CreateFrom(chartfile *chart.Metadata, dest, src string) error {
 		return fmt.Errorf("reading values file: %w", err)
 	}
 
-	var m map[string]any
+	var m map[string]interface{}
 	if err := yaml.Unmarshal(transform(string(b), schart.Name()), &m); err != nil {
 		return fmt.Errorf("transforming values file: %w", err)
 	}

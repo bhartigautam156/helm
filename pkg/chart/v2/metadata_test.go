@@ -16,7 +16,6 @@ limitations under the License.
 package v2
 
 import (
-	"errors"
 	"testing"
 )
 
@@ -182,7 +181,7 @@ func TestValidate(t *testing.T) {
 
 	for _, tt := range tests {
 		result := tt.md.Validate()
-		if !errors.Is(result, tt.err) {
+		if result != tt.err {
 			t.Errorf("expected %q, got %q in test %q", tt.err, result, tt.name)
 		}
 	}

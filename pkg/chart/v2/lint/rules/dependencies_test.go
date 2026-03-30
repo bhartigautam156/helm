@@ -72,7 +72,7 @@ func TestValidateDependencyInMetadata(t *testing.T) {
 	c := chartWithBadDependencies()
 
 	if err := validateDependencyInMetadata(&c); err == nil {
-		t.Error("chart should have been flagged for missing deps in chart metadata")
+		t.Errorf("chart should have been flagged for missing deps in chart metadata")
 	}
 }
 
@@ -132,7 +132,7 @@ func TestValidateDependenciesUnique(t *testing.T) {
 
 	for _, tt := range tests {
 		if err := validateDependenciesUnique(&tt.chart); err == nil {
-			t.Error("chart should have been flagged for dependency shadowing")
+			t.Errorf("chart should have been flagged for dependency shadowing")
 		}
 	}
 }
